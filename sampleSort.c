@@ -11,7 +11,7 @@
 int rank, P, N, Nmod, pos, ns, buf_size, rtot;
 int *as, *s, *buf, *rbuf;
 
-// Bubble sort used in lab8?
+// Bubble sort...
 //
 void bubbleSort(int n, int a[]) {
   for (int i = 0; i < n; i++)
@@ -77,7 +77,6 @@ void splitters() {
 
 
   // gather all splitters from the other processes.
-
   if(rank == 0){
     bubbleSort(ns, as);
     step = ns/(P);
@@ -158,13 +157,6 @@ void write_to_file(char * outfile) {
   displ[0]=0;
   for(int i = 0; i < P; i++) 
     displ[i+1] = displ[i] + r[i];
-  /*
-  printf("rank: %d, whichN %di rtot %d:", rank, whichN, rtot);
-  for(int i = 0; i < whichN; ++i){
-    printf(" %d", buf[i]);
-  }
-  printf("\n");
-  */
   MPI_File_write_at(fout,sizeof(int)* displ[rank], rbuf, rtot, MPI_INT, &st);
   MPI_File_close(&fout);
 }
@@ -191,15 +183,7 @@ int main(int argc, char **argv) {
   split_send();
   
   bubbleSort(rtot, rbuf);
-/*
-  printf(6rank: %d:", rank);
-  int k = 0;
-  for(int i = 0; i < rtot; ++i){
-    printf(" %d", rbuf[i]);
-    ++k;
-  }
-  printf(" k:%d\n", k);
-*/
+
   write_to_file(argv[2]);
 
   printf("%d exiting\n", rank);
